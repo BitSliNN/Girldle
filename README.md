@@ -5,24 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Girldle</title>
     <style>
+        /* Reset all styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
+        html {
             width: 100%;
             height: 100%;
-            margin: 0;
-            padding: 0;
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
+            font-family: 'Arial', sans-serif !important;
+            background-color: #f5f5f5 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            min-height: 100vh !important;
+            width: 100% !important;
+            overflow-x: hidden !important;
+        }
+
+        #gameWrapper {
+            width: 100%;
             min-height: 100vh;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -31,12 +39,12 @@
         .container {
             max-width: 1100px;
             width: 100%;
-            margin: 20px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: relative;
+            background: white !important;
+            padding: 30px !important;
+            border-radius: 10px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            position: relative !important;
+            margin: 20px 0 !important;
         }
 
         .header-icons {
@@ -330,6 +338,7 @@
     </style>
 </head>
 <body>
+    <div id="gameWrapper">
     <div class="container">
         <div class="header-icons">
             <button class="icon-button" id="helpBtn" title="How to Play">?</button>
@@ -364,6 +373,7 @@
         </table>
 
         <div id="message" class="message"></div>
+    </div>
     </div>
 
     <!-- How to Play Modal -->
