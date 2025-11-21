@@ -11,15 +11,27 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             background-color: #f5f5f5;
             padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
 
         .container {
             max-width: 1100px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 20px auto;
             background: white;
             padding: 30px;
             border-radius: 10px;
@@ -82,6 +94,7 @@
             max-height: 80vh;
             overflow-y: auto;
             position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
 
         .modal-close {
@@ -93,6 +106,8 @@
             color: #666;
             background: none;
             border: none;
+            line-height: 1;
+            padding: 0;
         }
 
         .modal-close:hover {
@@ -199,6 +214,7 @@
             font-size: 3em;
             letter-spacing: 3px;
             margin-bottom: 10px;
+            margin-top: 0;
         }
 
         h2 {
@@ -206,6 +222,7 @@
             text-align: center;
             font-size: 1.2em;
             margin-bottom: 10px;
+            margin-top: 0;
         }
 
         .guesses-counter {
