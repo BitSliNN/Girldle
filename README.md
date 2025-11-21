@@ -24,6 +24,173 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .header-icons {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #d91e5b;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #d91e5b;
+            transition: all 0.3s;
+        }
+
+        .icon-button:hover {
+            background: #d91e5b;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 30px;
+            cursor: pointer;
+            color: #666;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            color: #d91e5b;
+        }
+
+        .modal h2 {
+            color: #d91e5b;
+            margin-bottom: 20px;
+        }
+
+        .modal h3 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .modal p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .color-example {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .example-correct {
+            background-color: #6aaa64;
+            color: white;
+        }
+
+        .example-partial {
+            background-color: #c9b458;
+            color: white;
+        }
+
+        .example-incorrect {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 5px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #d91e5b;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .guess-distribution {
+            margin-top: 20px;
+        }
+
+        .distribution-bar {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .distribution-label {
+            width: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .distribution-fill {
+            background: #6aaa64;
+            color: white;
+            padding: 5px 10px;
+            margin-left: 10px;
+            border-radius: 3px;
+            min-width: 20px;
+            text-align: center;
+            font-weight: bold;
         }
 
         h1 {
@@ -147,6 +314,11 @@
 </head>
 <body>
     <div class="container">
+        <div class="header-icons">
+            <button class="icon-button" id="helpBtn" title="How to Play">?</button>
+            <button class="icon-button" id="statsBtn" title="Statistics">📊</button>
+        </div>
+        
         <h1>GIRLDLE</h1>
         <h2>GUESSING GAME</h2>
         <div class="guesses-counter">
@@ -175,6 +347,98 @@
         </table>
 
         <div id="message" class="message"></div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('helpModal')">&times;</button>
+            <h2>How to Play GIRLDLE</h2>
+            
+            <p>Guess the mystery person in 8 tries or less!</p>
+            
+            <h3>How It Works</h3>
+            <p>Each guess will reveal clues about how close you are to the correct answer:</p>
+            
+            <h3>Color Meanings</h3>
+            <p><span class="color-example example-correct">Green</span> = Correct match!</p>
+            <p><span class="color-example example-partial">Yellow</span> = Partial match (for Ethnicity only)</p>
+            <p><span class="color-example example-incorrect">Gray</span> = Incorrect</p>
+            
+            <h3>Category Clues</h3>
+            <p><strong>Birth Year & Height:</strong> Arrows show if you need to guess higher (↑) or lower (↓)</p>
+            <p><strong>Gender:</strong> Must match exactly</p>
+            <p><strong>Website:</strong> Must match exactly</p>
+            <p><strong>Ethnicity:</strong> Yellow means you got at least one ethnicity correct (for multi-ethnic people)</p>
+            <p><strong>Status:</strong> Active, Retired, or Semi-retired</p>
+            
+            <h3>Example</h3>
+            <p>If you guess someone born in 1990 and see <strong>1990 ↑</strong>, the correct answer was born after 1990.</p>
+            <p>If you guess "Mexican, Turkish" for ethnicity and it turns yellow, at least one of those ethnicities is correct!</p>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('statsModal')">&times;</button>
+            <h2>Statistics</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="totalPlayed">0</div>
+                    <div class="stat-label">Played</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="winPercentage">0</div>
+                    <div class="stat-label">Win %</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <div class="stat-label">Current Streak</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="maxStreak">0</div>
+                    <div class="stat-label">Max Streak</div>
+                </div>
+            </div>
+            
+            <div class="guess-distribution">
+                <h3>Guess Distribution</h3>
+                <div class="distribution-bar">
+                    <div class="distribution-label">1</div>
+                    <div class="distribution-fill" id="dist1">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">2</div>
+                    <div class="distribution-fill" id="dist2">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">3</div>
+                    <div class="distribution-fill" id="dist3">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">4</div>
+                    <div class="distribution-fill" id="dist4">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">5</div>
+                    <div class="distribution-fill" id="dist5">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">6</div>
+                    <div class="distribution-fill" id="dist6">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">7</div>
+                    <div class="distribution-fill" id="dist7">0</div>
+                </div>
+                <div class="distribution-bar">
+                    <div class="distribution-label">8</div>
+                    <div class="distribution-fill" id="dist8">0</div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -334,6 +598,107 @@
         let gameOver = false;
         let correctAnswer = null;
         let guessedNames = [];
+
+        // Statistics management
+        function getStats() {
+            const stats = localStorage.getItem('girldle_stats');
+            if (stats) {
+                return JSON.parse(stats);
+            }
+            return {
+                totalPlayed: 0,
+                totalWins: 0,
+                currentStreak: 0,
+                maxStreak: 0,
+                guessDistribution: [0, 0, 0, 0, 0, 0, 0, 0],
+                lastPlayedDate: null,
+                lastWon: false
+            };
+        }
+
+        function saveStats(stats) {
+            localStorage.setItem('girldle_stats', JSON.stringify(stats));
+        }
+
+        function updateStats(won, guessNumber) {
+            const stats = getStats();
+            const today = getTodayDate();
+            
+            stats.totalPlayed++;
+            
+            if (won) {
+                stats.totalWins++;
+                stats.guessDistribution[guessNumber - 1]++;
+                
+                // Update streak
+                if (stats.lastPlayedDate) {
+                    const lastDate = new Date(stats.lastPlayedDate);
+                    const todayDate = new Date(today);
+                    const dayDiff = Math.floor((todayDate - lastDate) / (1000 * 60 * 60 * 24));
+                    
+                    if (dayDiff === 1 && stats.lastWon) {
+                        stats.currentStreak++;
+                    } else if (dayDiff === 0) {
+                        // Same day, don't change streak
+                    } else {
+                        stats.currentStreak = 1;
+                    }
+                } else {
+                    stats.currentStreak = 1;
+                }
+                
+                stats.maxStreak = Math.max(stats.maxStreak, stats.currentStreak);
+                stats.lastWon = true;
+            } else {
+                stats.currentStreak = 0;
+                stats.lastWon = false;
+            }
+            
+            stats.lastPlayedDate = today;
+            saveStats(stats);
+        }
+
+        function displayStats() {
+            const stats = getStats();
+            
+            document.getElementById('totalPlayed').textContent = stats.totalPlayed;
+            document.getElementById('winPercentage').textContent = 
+                stats.totalPlayed > 0 ? Math.round((stats.totalWins / stats.totalPlayed) * 100) : 0;
+            document.getElementById('currentStreak').textContent = stats.currentStreak;
+            document.getElementById('maxStreak').textContent = stats.maxStreak;
+            
+            // Display guess distribution
+            const maxGuesses = Math.max(...stats.guessDistribution, 1);
+            stats.guessDistribution.forEach((count, index) => {
+                const bar = document.getElementById(`dist${index + 1}`);
+                bar.textContent = count;
+                const percentage = (count / maxGuesses) * 100;
+                bar.style.width = `${Math.max(percentage, 10)}%`;
+            });
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+            if (modalId === 'statsModal') {
+                displayStats();
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Event listeners for buttons
+        document.getElementById('helpBtn').addEventListener('click', () => openModal('helpModal'));
+        document.getElementById('statsBtn').addEventListener('click', () => openModal('statsModal'));
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('show');
+            }
+        });
 
         // Get today's date in YYYY-MM-DD format
         function getTodayDate() {
@@ -571,10 +936,14 @@
                 message.textContent = '🎉 Congratulations! You guessed correctly!';
                 message.className = 'message success';
                 gameOver = true;
+                updateStats(true, guessCount);
+                setTimeout(() => openModal('statsModal'), 1500);
             } else if (guessCount >= maxGuesses) {
                 message.textContent = `Game Over! The answer was ${correctAnswer.name}`;
                 message.className = 'message';
                 gameOver = true;
+                updateStats(false, guessCount);
+                setTimeout(() => openModal('statsModal'), 1500);
             }
 
             // Save game state after each guess
